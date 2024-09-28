@@ -1,40 +1,95 @@
 {% load static %}
 <!DOCTYPE html>
-{% comment %} <!---Coding By CoderGirl | www.codinglabweb.com---> {% endcomment %}
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Login & Registration Form | CoderGirl</title>
-  {% comment %} <!---Custom CSS File---> {% endcomment %}
+  <title>Signup | Shabdh.ai</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
 </head>
-<body>
-  <div class="container">
-    <div class="registration form">
-      <header>Signup</header>
-      <form action="{% url 'register' %}" method="POST">
+
+<body class="bg-gray-100">
+
+  <!-- Container for form -->
+  <div class="relative flex items-center justify-center min-h-screen p-4 bg-gray-100">
+    <div class="max-w-md w-full bg-white rounded-lg shadow-md p-8 space-y-6 relative">
+
+      <!-- Cross Icon -->
+      <a href="{% url 'index' %}"
+        class="absolute top-4 right-4 text-gray-600 hover:text-gray-900 transition duration-300">
+        <i class="fa-solid fa-xmark text-gray-600"></i><!-- Cross Icon -->
+      </a>
+
+      <!-- Signup Header -->
+      <header class="text-center text-2xl font-semibold text-blue-600">Signup</header>
+
+      <!-- Form -->
+      <form action="{% url 'register' %}" method="POST" class="space-y-4">
         {% csrf_token %}
-        <input type="text" placeholder="Enter your first name" name="first_name">
-        <input type="text" placeholder="Enter your last name" name="last_name">
-        <input type="text" placeholder="Enter your email" name="email">
-        <input type="password" placeholder="Create a password" name="password1">
-        <input type="password" placeholder="Confirm your password" name="password2">
-        <input type="submit" class="button" value="Signup">
-        <center>
+
+        <!-- First Name Input -->
+        <div>
+          <input type="text" name="first_name" placeholder="Enter your first name"
+            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+            required>
+        </div>
+
+        <!-- Last Name Input -->
+        <div>
+          <input type="text" name="last_name" placeholder="Enter your last name"
+            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+            required>
+        </div>
+
+        <!-- Email Input -->
+        <div>
+          <input type="email" name="email" placeholder="Enter your email"
+            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+            required>
+        </div>
+
+        <!-- Password Input -->
+        <div>
+          <input type="password" name="password1" placeholder="Create a password"
+            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+            required>
+        </div>
+
+        <!-- Confirm Password Input -->
+        <div>
+          <input type="password" name="password2" placeholder="Confirm your password"
+            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+            required>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <input type="submit"
+            class="w-full py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 cursor-pointer transition duration-300"
+            value="Signup">
+        </div>
+
+        <!-- Error Messages -->
+        <div class="text-center">
           {% if error %}
-          <p style="color: red;">{{ error }}</p>
+          <p class="text-red-500">{{ error }}</p>
           {% endif %}
-        </center>
-        
+        </div>
       </form>
-      <div class="signup">
-        <span class="signup">Already have an account?
-          <a href="{% url 'login' %}"><label for="check">Signin</label></a>
+
+      <!-- Signin Link -->
+      <div class="text-center">
+        <span class="text-sm text-gray-600">Already have an account?
+          <a href="{% url 'login' %}" class="text-blue-600 hover:underline">Signin</a>
         </span>
       </div>
     </div>
   </div>
+
 </body>
+
 </html>

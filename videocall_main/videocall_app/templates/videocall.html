@@ -1,47 +1,95 @@
-<html></html>
-  <head>
-    <style>
-      #root {
-        width: 100vw;
-        height: 100vh;
-        position: relative; /* For positioning captions relative to the video */
-      }
+<html>
 
-      /* Styling the captions overlay */
-      #captions {
-        display: none; /* Hide by default */
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-size: 16px;
-        max-width: 80%;
-        text-align: center;
-        z-index: 10; /* Ensure it is above other elements */
-      }
+<head>
+  <style>
+    #root {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      /* For positioning captions relative to the video */
+    }
 
-      #status {
-        display: none; /* Hide status by default */
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(255, 255, 255, 0.7);
-        color: black;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 14px;
-        z-index: 10; /* Ensure it's visible */
-      }
-    </style>
-  </head>
+    /* Styling the captions overlay */
+    #captions {
+      display: none;
+      /* Hide by default */
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      /* Semi-transparent background */
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      max-width: 80%;
+      text-align: center;
+      z-index: 10;
+      /* Ensure it is above other elements */
+    }
 
-  <body>
-    <div id="root"></div>
-  </body>
+    #status {
+      display: none;
+      /* Hide status by default */
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      color: black;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      z-index: 10;
+      /* Ensure it's visible */
+    }
+
+    /* Button styling */
+    .button {
+      background-color: #3b82f6;
+      /* Blue for join button */
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-align: center;
+      display: inline-block;
+      margin: 5px 0;
+      /* Space between buttons */
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #2563eb;
+      /* Darker blue on hover */
+    }
+
+    .close-button {
+      background-color: #ef4444;
+      /* Red for close button */
+    }
+
+    .close-button:hover {
+      background-color: #dc2626;
+      /* Darker red on hover */
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <!-- Join Button -->
+  <a href="#" class="button absolute top-4 right-4">
+    Join
+  </a>
+
+  <!-- Close Button -->
+  <a href="{% url 'dashboard' %}" class="button close-button absolute top-16 right-4">
+    Close
+  </a>
+
   <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.js"></script>
   <!-- Include Recorder.js via CDN -->
@@ -187,11 +235,11 @@
     };
   </script>
 
-  <div id="root"></div>
-
   <!-- Captions will be shown here -->
   <div id="captions">Captions will appear here...</div>
 
   <!-- Status code will be shown here -->
   <div id="status">API Status Code: N/A</div>
+</body>
+
 </html>

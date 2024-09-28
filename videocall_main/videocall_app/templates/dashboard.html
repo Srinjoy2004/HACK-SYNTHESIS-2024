@@ -1,21 +1,44 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Video Conference</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <body>
-    <div class="dashboard">
-        <h1>Welcome, {{name}}!</h1>
-        <!-- create a "New Meeting" button -->
-        <a href="{% url 'meeting' %}" class="button">New Meeting</a>
-        <a href="{% url 'join_room' %}" class="button">Join Meeting</a>
-        <a href="{% url 'logout' %}" class="button">Logout</a>
-    </div>
-  </body>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+  <!-- Dashboard Container -->
+  <div class="bg-white shadow-md rounded-lg p-8 max-w-lg w-full text-center space-y-8">
+
+    <!-- Welcome Message -->
+    <h1 class="text-3xl font-bold text-blue-700">Welcome, {{ name }}!</h1>
+
+    <!-- Buttons Container -->
+    <div class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4 justify-center">
+      <!-- New Meeting Button -->
+      <a href="{% url 'meeting' %}"
+        class="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+        +New Meeting
+      </a>
+
+      <!-- Join Meeting Button -->
+      <a href="{% url 'join_room' %}"
+        class="bg-green-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition duration-300">
+        Join Meeting →
+      </a>
+
+      <!-- Logout Button -->
+      <a href="{% url 'logout' %}"
+        class="bg-red-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-600 transition duration-300">
+        Logout
+      </a>
+    </div>
+  </div>
+</body>
+
 </html>
