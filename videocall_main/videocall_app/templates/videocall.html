@@ -1,0 +1,197 @@
+<html></html>
+  <head>
+    <style>
+      #root {
+        width: 100vw;
+        height: 100vh;
+        position: relative; /* For positioning captions relative to the video */
+      }
+
+      /* Styling the captions overlay */
+      #captions {
+        display: none; /* Hide by default */
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        max-width: 80%;
+        text-align: center;
+        z-index: 10; /* Ensure it is above other elements */
+      }
+
+      #status {
+        display: none; /* Hide status by default */
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.7);
+        color: black;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        z-index: 10; /* Ensure it's visible */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.js"></script>
+  <!-- Include Recorder.js via CDN -->
+  <script>
+    window.onload = function () {
+      let intervalID; // To store interval ID for stopping captions
+
+      function getUrlParams(url) {
+        let urlStr = url.split("?")[1];
+        const urlSearchParams = new URLSearchParams(urlStr);
+        const result = Object.fromEntries(urlSearchParams.entries());
+        return result;
+      }
+
+      // Generate a Token by calling a method.
+      const roomID =
+        getUrlParams(window.location.href)["roomID"] ||
+        Math.floor(Math.random() * 10000) + "";
+      const userID = Math.floor(Math.random() * 10000) + "";
+      const userName = "{{ name }}";
+      const appID = 747635589;
+      const serverSecret = "f168a57eb7d255e51bb82a330aa18d8e";
+      const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+        appID,
+        serverSecret,
+        roomID,
+        userID,
+        userName
+      );
+
+      const zp = ZegoUIKitPrebuilt.create(kitToken);
+
+      // Configure join room options
+      zp.joinRoom({
+        container: document.querySelector("#root"),
+        sharedLinks: [
+          {
+            name: "Personal link",
+            url:
+              window.location.protocol +
+              "//" +
+              window.location.host +
+              window.location.pathname +
+              "?roomID=" +
+              roomID,
+          },
+        ],
+        scenario: {
+          mode: ZegoUIKitPrebuilt.VideoConference,
+        },
+        turnOnMicrophoneWhenJoining: false,
+        turnOnCameraWhenJoining: false,
+        showMyCameraToggleButton: true,
+        showMyMicrophoneToggleButton: true,
+        showAudioVideoSettingsButton: true,
+        showScreenSharingButton: true,
+        showTextChat: true,
+        showUserList: true,
+        maxUsers: 50,
+        layout: "Grid",
+        showLayoutButton: true,
+        onJoinRoom: () => {
+          // Show captions and status when in the meeting
+          document.getElementById("captions").style.display = "block";
+          document.getElementById("status").style.display = "block";
+          startRecording();
+        },
+        onLeaveRoom: () => {
+          // Hide captions and status after leaving the room
+          stopRecording();
+          document.getElementById("captions").style.display = "none";
+          document.getElementById("status").style.display = "none";
+        },
+      });
+
+      // Function to capture audio and send it to API
+      async function startRecording() {
+        try {
+          // Get access to the microphone
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+          const audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+          const input = audioContext.createMediaStreamSource(stream);
+
+          // Create the Recorder.js instance
+          const recorder = new Recorder(input, { numChannels: 1 });
+          recorder.record(); // Start recording
+
+          // Capture audio and send to API every 5 seconds
+          intervalID = setInterval(() => {
+            recorder.exportWAV(async (blob) => {
+              const formData = new FormData();
+              formData.append("audio", blob, "recording.wav");
+              formData.append("language", "bn"); // Set language dynamically if needed
+
+              // Send the recorded WAV audio to the API
+              const response = await fetch(
+                "https://caption-gen-b2439bd35fb0.herokuapp.com/recognize_translate",
+                {
+                  method: "POST",
+                  body: formData,
+                }
+              );
+
+              const result = await response.json();
+              const statusCode = response.status;
+
+              // Display API status code
+              document.getElementById("status").innerText =
+                "API Status Code: " + statusCode;
+
+              // Display the result (captions) on the page
+              if (result.recognized_text && result.translation_to_english) {
+                document.getElementById("captions").innerText =
+                  result.recognized_text +
+                  " | Translation: " +
+                  result.translation_to_english;
+              } else {
+                document.getElementById("captions").innerText =
+                  "Error: " + result.error;
+              }
+            });
+
+            // Clear the recording buffer for the next capture
+            recorder.clear();
+          }, 5000); // Send audio to API every 5 seconds
+        } catch (error) {
+          console.error("Error capturing audio: ", error);
+          document.getElementById("captions").innerText = "Error: " + error;
+        }
+      }
+
+      // Function to stop recording
+      function stopRecording() {
+        if (intervalID) {
+          clearInterval(intervalID); // Stop the interval that captures audio
+          intervalID = null;
+          document.getElementById("captions").innerText = "Captions stopped.";
+        }
+      }
+    };
+  </script>
+
+  <div id="root"></div>
+
+  <!-- Captions will be shown here -->
+  <div id="captions">Captions will appear here...</div>
+
+  <!-- Status code will be shown here -->
+  <div id="status">API Status Code: N/A</div>
+</html>
