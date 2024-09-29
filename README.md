@@ -1,6 +1,6 @@
 # Shabdh.AI
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?color=45ffaa&size=40&width=900&height=80&lines=Welcome-to-the-Shabdh.Ai" alt="Welcome to the Shabdh.Ai"/>
+  <img src="https://readme-typing-svg.herokuapp.com?color=FFA500&size=40&width=900&height=80&lines=Welcome-to-the-Shabdh.Ai" alt="Welcome to the Shabdh.Ai"/>
 </p>
 
 ![Shabdh.AI Logo](./Front-Page_Shabdh.png)
