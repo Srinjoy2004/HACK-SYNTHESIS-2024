@@ -32,6 +32,8 @@
 - **Machine Learning**: Custom CNN model for gesture recognition with  upto 97% accuracy
 - **Video Call**: WebRTC for video functionality
 - **Database**: SQLite 
+## System Architecture For Our Shabdh.Ai →
+![Shabdh.AI Logo](./System-Architecture.png)
 
 ## Diagram For the  Model Accuracy and Model Loss For Shabdh.Ai
 ![Shabdh.AI Logo](./Comparison.png)
